@@ -311,7 +311,7 @@ dialog h3{font:700 20px 'Cinzel Decorative',serif;color:var(--blood);margin-bott
 <script>
 (function(){
 'use strict';
-const KEY='grimorio-personagem-v1';
+const KEY = "grimorio_norvantis_v1";
 const $=s=>document.querySelector(s);
 const uid=()=>Math.random().toString(36).slice(2,9);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -939,6 +939,7 @@ render(true);
 </script>
 <script>
   const DB_URL = atob("aHR0cHM6Ly9ncmltb3Jpby1hY2VydG9jcml0aWNvLWRlZmF1bHQtcnRkYi5maXJlYmFzZWlvLmNvbS8=") + "grimorio_norvantis.json";
+  const CHAVE_DESTA_MESA = "grimorio_norvantis_v1";
   let ultimoJsonEnviado = "";
   let bloqueado = false;
 
@@ -980,27 +981,12 @@ render(true);
       const jsonNuvem = JSON.stringify(dadosNuvem);
       if (jsonNuvem === ultimoJsonEnviado) return;
 
-      let chaveLocal = Object.keys(localStorage).find(k => {
-        try {
-          const p = JSON.parse(localStorage.getItem(k));
-          return p && Array.isArray(p.chars);
-        } catch (e) {
-          return false;
-        }
-      });
-
-      const valorLocal = chaveLocal ? localStorage.getItem(chaveLocal) : null;
+      const valorLocal = localStorage.getItem(CHAVE_DESTA_MESA);
 
       if (valorLocal !== jsonNuvem) {
         bloqueado = true;
         ultimoJsonEnviado = jsonNuvem;
-
-        if (chaveLocal) {
-          localStorage.setItem(chaveLocal, jsonNuvem);
-        } else {
-          localStorage.setItem("grimorio_backup", jsonNuvem);
-        }
-
+        localStorage.setItem(CHAVE_DESTA_MESA, jsonNuvem);
         location.reload();
       } else {
         ultimoJsonEnviado = jsonNuvem;
