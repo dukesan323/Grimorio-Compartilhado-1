@@ -938,7 +938,7 @@ render(true);
 })();
 </script>
 <script>
- const DB_URL = atob("aHR0cHM6Ly9ncmltb3Jpby1hY2VydG9jcml0aWNvLWRlZmF1bHQtcnRkYi5maXJlYmFzZWlvLmNvbS8=") + "grimorio_norvantis.json";
+  const DB_URL = atob("aHR0cHM6Ly9ncmltb3Jpby1hY2VydG9jcml0aWNvLWRlZmF1bHQtcnRkYi5maXJlYmFzZWlvLmNvbS8=") + "grimorio_norvantis.json";
   let ultimoJsonEnviado = "";
   let bloqueado = false;
 
@@ -956,12 +956,10 @@ render(true);
 
       if (resposta.ok) {
         ultimoJsonEnviado = jsonAtual;
-        console.log("✅ Grimório salvo na nuvem com sucesso!");
-      } else {
-        console.error("❌ Erro HTTP ao salvar no Firebase:", resposta.status, await resposta.text());
+        console.log("✅ Grimório Norvantis salvo na nuvem!");
       }
     } catch (erro) {
-      console.error("❌ Falha de conexão ao salvar no Firebase:", erro);
+      console.error("❌ Erro ao salvar no Firebase:", erro);
     }
   };
 
@@ -974,15 +972,13 @@ render(true);
       const dadosNuvem = await resposta.json();
       if (!dadosNuvem || !Array.isArray(dadosNuvem.chars)) return;
 
-      const jsonNuvem = JSON.stringify(dadosNuvem);
-      if (jsonNuvem === ultimoJsonEnviado) return;
-            const dadosNuvem = await resposta.json();
-      if (!dadosNuvem || !Array.isArray(dadosNuvem.chars)) return;
-
       dadosNuvem.chars.forEach(c => {
         if (!c.refs) c.refs = { items: [] };
         if (!Array.isArray(c.refs.items)) c.refs.items = [];
       });
+
+      const jsonNuvem = JSON.stringify(dadosNuvem);
+      if (jsonNuvem === ultimoJsonEnviado) return;
 
       let chaveLocal = Object.keys(localStorage).find(k => {
         try {
@@ -1005,7 +1001,6 @@ render(true);
           localStorage.setItem("grimorio_backup", jsonNuvem);
         }
 
-        console.log("🔄 Novos personagens encontrados na nuvem! Atualizando tela...");
         location.reload();
       } else {
         ultimoJsonEnviado = jsonNuvem;
